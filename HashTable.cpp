@@ -5,7 +5,7 @@ HashTable::HashTable(size_t size) noexcept
 {
     _filled=0;
     _capacity=size > 0 ? size : 1;
-    table.reserve(_capacity);
+    table.resize(_capacity);
 }
 
 HashTable::~HashTable()
