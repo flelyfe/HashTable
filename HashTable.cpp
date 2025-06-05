@@ -5,7 +5,7 @@ HashTable::HashTable(size_t size) noexcept
 {
     _filled=0;
     _capacity=size > 0 ? size : 1;
-    table.resize(_capacity);
+    table.reserve(_capacity);
 }
 
 HashTable::~HashTable()
@@ -26,19 +26,17 @@ size_t HashTable::hash_function(const KeyType &key) const
 
 void HashTable::insert(const KeyType &key, const ValueType &value)
 {
-    ValueType t;
-    if (find(key,t))
+    bool key_exist=false;
+    for (auto& pair : table[hash_function(key)])
     {
-        for (auto i:table[hash_function(key)])
+    	if (pair.first==key)
         {
-            if (key==i.first)
-            {
-                i.second=value;
-                break;
-            }
+            pair.second=value;
+	    key_exist=true;
+            break;
         }
     }
-    else
+    if (!key_exist)
     {
         table[hash_function(key)].push_back(std::make_pair(key, value));
         _filled++;
